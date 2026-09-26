@@ -29,9 +29,9 @@ For each appliance, the user enters:
 * Power rating in watts
 * Operating hours per day
 
-GridGuard uses this information to calculate the total daily energy consumption and connected load.
+GridGuard uses this information to calculate total daily energy consumption and connected load.
 
-The Solar Advisor then uses user-provided system parameters such as:
+The Solar Advisor uses user-provided system parameters such as:
 
 * Peak sun hours
 * Solar system efficiency
@@ -40,20 +40,20 @@ The Solar Advisor then uses user-provided system parameters such as:
 * Battery depth of discharge
 * Battery efficiency
 
-The program uses these values to provide estimated solar, battery, and inverter requirements.
+The program then provides estimated solar, battery, and inverter requirements.
 
 ## Project Structure
 
 ```text
 GridGuard/
 │
-├── project.py
+├── GridGuard.py
 ├── test_project.py
-├── requirements.txt
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
-### `project.py`
+### `GridGuard.py`
 
 Contains the main GridGuard application, calculations, recommendations, report generation, input validation, and menu system.
 
@@ -63,7 +63,7 @@ Contains automated tests for the main calculation functions.
 
 ### `requirements.txt`
 
-The project does not require external Python packages for normal operation because it uses Python's standard library.
+Lists the external packages required by the project. The main application uses Python's standard library and does not require external packages.
 
 ### `README.md`
 
@@ -74,14 +74,14 @@ Contains project documentation and instructions.
 * Python 3
 * pytest for running automated tests
 
-The main application itself does not require any external Python libraries.
+The main application itself does not require external Python libraries.
 
 ## How to Run
 
 Open a terminal in the GridGuard folder and run:
 
 ```bash
-python project.py
+python GridGuard.py
 ```
 
 The program will display the main menu:
@@ -135,7 +135,7 @@ It shows:
 * New daily energy
 * Change in energy consumption
 
-This can help users understand how changing appliance usage affects overall energy consumption.
+This helps users understand how changing appliance usage affects overall energy consumption.
 
 ## Recommendations
 
