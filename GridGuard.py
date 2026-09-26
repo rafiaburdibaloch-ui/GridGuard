@@ -47,39 +47,36 @@ def calculate_inverter_capacity(peak_load):
 
 def generate_recommendations(appliances):
     recommendations = []
-
     highest = find_highest_consumer(appliances)
-
     if highest is not None:
         recommendations.append(
             f"Consider reducing the usage of {highest['name']}, "
             f"which is your highest energy consumer."
         )
-
     peak_load = calculate_peak_load(appliances)
-
     if peak_load > 3000:
         recommendations.append(
             "Your connected load is relatively high. "
             "Consider checking which appliances need to operate simultaneously."
         )
-
     daily_energy = calculate_daily_energy(appliances)
-
     if daily_energy > 10:
         recommendations.append(
             "Daily energy consumption is high. "
             "Consider improving energy efficiency or reducing unnecessary usage."
         )
-
     if not recommendations:
         recommendations.append(
             "Your current energy usage appears relatively moderate."
         )
-
     return recommendations
 
-def export_report(appliances):
+def export_report(
+    appliances,
+    solar_data=None,
+    what_if_data=None,
+    recommendations=None
+):
     daily_energy = calculate_daily_energy(appliances)
     peak_load = calculate_peak_load(appliances)
     highest = find_highest_consumer(appliances)
@@ -88,6 +85,7 @@ def export_report(appliances):
         file.write("GRIDGUARD ENERGY REPORT\n")
         file.write("=======================\n\n")
 
+        # APPLIANCES
         file.write("APPLIANCES\n")
         file.write("----------\n")
 
@@ -99,6 +97,7 @@ def export_report(appliances):
                 f"Hours/day: {appliance['hours']}\n"
             )
 
+        # ENERGY ANALYSIS
         file.write("\nENERGY ANALYSIS\n")
         file.write("----------------\n")
         file.write(f"Daily energy: {daily_energy:.2f} kWh\n")
@@ -106,6 +105,96 @@ def export_report(appliances):
 
         if highest is not None:
             file.write(f"Highest consumer: {highest['name']}\n")
+
+        # SOLAR ADVISOR
+        file.write("\nSOLAR & BATTERY ANALYSIS\n")
+        file.write("------------------------\n")
+
+        if solar_data is not None:
+            file.write(
+                f"Peak sun hours: "
+                f"{solar_data['peak_sun_hours']:.2f}\n"
+            )
+            file.write(
+                f"System efficiency: "
+                f"{solar_data['efficiency']:.2f}\n"
+            )
+            file.write(
+                f"Backup hours: "
+                f"{solar_data['backup_hours']:.2f}\n"
+            )
+            file.write(
+                f"Battery voltage: "
+                f"{solar_data['voltage']:.2f} V\n"
+            )
+            file.write(
+                f"Depth of discharge: "
+                f"{solar_data['dod']:.2f}\n"
+            )
+            file.write(
+                f"Battery efficiency: "
+                f"{solar_data['battery_efficiency']:.2f}\n"
+            )
+            file.write(
+                f"Estimated solar capacity: "
+                f"{solar_data['solar_capacity']:.2f} kW\n"
+            )
+            file.write(
+                f"Required backup energy: "
+                f"{solar_data['backup_energy']:.2f} kWh\n"
+            )
+            file.write(
+                f"Estimated battery capacity: "
+                f"{solar_data['battery_capacity']:.2f} Ah\n"
+            )
+            file.write(
+                f"Estimated inverter capacity: "
+                f"{solar_data['inverter_capacity']:.0f} W\n"
+            )
+        else:
+            file.write("Solar Advisor was not performed.\n")
+
+        # WHAT-IF SIMULATION
+        file.write("\nWHAT-IF SIMULATION\n")
+        file.write("------------------\n")
+
+        if what_if_data is not None:
+            file.write(
+                f"Appliance: "
+                f"{what_if_data['name']}\n"
+            )
+            file.write(
+                f"Original hours/day: "
+                f"{what_if_data['old_hours']:.2f}\n"
+            )
+            file.write(
+                f"New hours/day: "
+                f"{what_if_data['new_hours']:.2f}\n"
+            )
+            file.write(
+                f"Current daily energy: "
+                f"{what_if_data['current_energy']:.2f} kWh\n"
+            )
+            file.write(
+                f"New daily energy: "
+                f"{what_if_data['new_total_energy']:.2f} kWh\n"
+            )
+            file.write(
+                f"Change: "
+                f"{what_if_data['difference']:+.2f} kWh/day\n"
+            )
+        else:
+            file.write("What-If Simulator was not performed.\n")
+
+        # RECOMMENDATIONS
+        file.write("\nRECOMMENDATIONS\n")
+        file.write("----------------\n")
+
+        if recommendations is not None:
+            for recommendation in recommendations:
+                file.write(f"- {recommendation}\n")
+        else:
+            file.write("Recommendations were not generated.\n")
 
     print("Report exported successfully!")
 def main():
@@ -352,8 +441,5 @@ def main():
             break
 
 
-
 if __name__ == "__main__":
     main()
-
-
